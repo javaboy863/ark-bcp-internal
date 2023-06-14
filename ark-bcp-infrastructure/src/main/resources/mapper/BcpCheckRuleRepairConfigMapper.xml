@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BcpCheckRuleRepairConfigRepository">
+
+    <!--通用应用节运行时数据表映射-->
+    <resultMap id="BaseResultMap" type="BcpCheckRuleRepairEntity">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="ruleId" column="rule_id" jdbcType="INTEGER"/>
+        <result property="repairType" column="repair_type" jdbcType="INTEGER"/>
+        <result property="repairConfigJson" column="repair_config_json" jdbcType="VARCHAR"/>
+        <result property="zipped" column="zipped" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 通用查询结果集合-->
+    <sql id="Base_Column_List">
+		id,rule_id,repair_type,repair_config_json,zipped,create_time,update_time
+	</sql>
+
+    <sql id="conditions">
+        <if test="ruleId != null">and rule_id =#{ruleId,jdbcType=INTEGER}</if>
+        <if test="repairType != null">and repair_type =#{repairType,jdbcType=INTEGER}</if>
+    </sql>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectBcpCheckRuleRepairConfigById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM bcp_check_rule_repair_config
+        WHERE id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!-- 添加 （匹配有值的字段,不建议使用）-->
+    <insert id="insertBcpCheckRuleRepairConfig" useGeneratedKeys="true" keyProperty="id"
+            parameterType="BcpCheckRuleRepairEntity">
+        INSERT INTO bcp_check_rule_repair_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null">rule_id,</if>
+            <if test="repairType != null">repair_type,</if>
+            <if test="repairConfigJson != null">repair_config_json,</if>
+            <if test="zipped != null">zipped,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null">#{ruleId,jdbcType=INTEGER},</if>
+            <if test="repairType != null">#{repairType,jdbcType=INTEGER},</if>
+            <if test="repairConfigJson != null">#{repairConfigJson,jdbcType=VARCHAR},</if>
+            <if test="zipped != null">#{zipped,jdbcType=INTEGER},</if>
+        </trim>
+        ON DUPLICATE KEY UPDATE
+        <trim suffixOverrides=",">
+            <if test="repairType != null">repair_type=#{repairType,jdbcType=INTEGER},</if>
+            <if test="repairConfigJson != null">repair_config_json=#{repairConfigJson,jdbcType=VARCHAR},</if>
+            <if test="zipped != null">zipped=#{zipped,jdbcType=INTEGER},</if>
+        </trim>
+    </insert>
+
+    <!-- 根据主键修改输入的值-->
+    <update id="updateBcpCheckRuleRepairConfigBySelective"
+            parameterType="BcpCheckRuleRepairEntity">
+        UPDATE bcp_check_rule_repair_config
+        <set>
+            <if test="repairConfigJson != null">repair_config_json=#{repairConfigJson,jdbcType=VARCHAR},</if>
+            <if test="zipped != null">zipped=#{zipped,jdbcType=INTEGER},</if>
+        </set>
+        WHERE rule_id=#{ruleId,jdbcType=INTEGER} and repair_type=#{repairType,jdbcType=INTEGER};
+    </update>
+
+    <delete id="deleteBcpCheckRuleRepairConfigByRuleId" parameterType="java.lang.Long">
+		delete  FROM bcp_check_rule_repair_config
+		WHERE rule_id = #{ruleId,jdbcType=INTEGER}
+	</delete>
+
+
+    <!-- 按条件查询列表 -->
+    <select id="selectBcpCheckRuleRepairConfigList" resultMap="BaseResultMap"
+            parameterType="BcpCheckRuleRepairEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM bcp_check_rule_repair_config
+        <where>
+            <include refid="conditions"/>
+        </where>
+    </select>
+
+
+</mapper>

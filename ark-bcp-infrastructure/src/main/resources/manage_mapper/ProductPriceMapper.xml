@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ProductPriceRepository">
+
+    <!--通用应用节运行时数据表映射-->
+    <resultMap id="BaseResultMap" type="ProductPriceEntity">
+        <result property="sku" column="product_code" jdbcType="VARCHAR"/>
+        <result property="regionName" column="region_name" jdbcType="VARCHAR"/>
+        <result property="costPrice" column="cost_price" jdbcType="INTEGER"/>
+        <result property="ptDate" column="ptdate" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 通用查询结果集合-->
+    <sql id="Base_Column_List">
+		product_code,region_name,cost_price,ptdate,create_time
+	</sql>
+
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="queryLastCostPricePoint" resultMap="BaseResultMap" parameterType="ProductPriceEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sku_cost_price
+        WHERE product_code = #{sku} and region_name=#{regionName}
+        ORDER BY create_time desc
+        limit 1;
+    </select>
+</mapper>

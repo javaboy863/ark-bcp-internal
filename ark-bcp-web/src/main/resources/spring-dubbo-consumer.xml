@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://code.alibabatech.com/schema/dubbo
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <dubbo:consumer timeout="1000" check="false" filter="notice,unifiledLogAuthFilter" retries="0">
+        <dubbo:parameter key="appCode" value="mryx-risk-bcp"/>
+        <!-- 测试环境 secretKey 统一为 zS7dOJUseXuX -->
+        <dubbo:parameter key="secretKey" value="${secretKey}"/>
+    </dubbo:consumer>
+
+    <dubbo:reference id="userOrderStatusService" interface="com.mryx.ark.tos.api.IUserOrderStatusService"
+                     registry="zsc"/>
+
+    <dubbo:reference id="voucherTemplateBGService"
+                     interface="com.missfresh.voucher.bg.center.service.IVoucherTemplateService" version="1.0"
+                     registry="zsc">
+    </dubbo:reference>
+
+    <dubbo:reference id="voucherService" interface="com.missfresh.voucher.center.service.IVoucherService"
+                     version="1.0" registry="zsc"/>
+
+    <dubbo:reference id="userCenterService" interface="com.missfresh.user.service.IUserCenterService"
+                     group="imf-usercenter-group"
+                     version="1.0" registry="zsc"/>
+
+
+</beans>

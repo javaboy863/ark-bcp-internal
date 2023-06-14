@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="order" value="2"/>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:/*.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <context:property-placeholder location="classpath:*.properties"/>
+
+    <!--
+	<import resource="classpath:sharding-redis.xml"/>
+	-->
+    <import resource="classpath:spring-dubbo-frame.xml"/>
+    <import resource="classpath:spring-dubbo-provider.xml"/>
+    <import resource="classpath:spring-dubbo-consumer.xml"/>
+    <import resource="classpath:dubbo-consumer-ccs.xml"/>
+    <import resource="classpath:dubbo-consumer-unifiedlog.xml"/>
+    <import resource="classpath:spring-logic-driver-esjob.xml"/>
+    <import resource="classpath:sharding-redis/message-pool-redis.xml"/>
+
+</beans>

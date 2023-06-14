@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!--ccs dubbo 服务-->
+    <dubbo:registry id="ms-auth-admin" timeout="3000" protocol="zookeeper" address="${ccs.zookeeper.address}"/>
+
+
+
+    <dubbo:reference interface="com.mryx.grampus.ccs.rpc.CcsTokenService" id="ccsTokenService"
+                     registry="ms-auth-admin" retries="1" check="true"/>
+    <dubbo:reference interface="com.mryx.grampus.ccs.rpc.CcsUserService" id="ccsUserService"
+                     registry="ms-auth-admin" retries="1" check="true"/>
+</beans>

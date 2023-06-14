@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EventMatchTempleteRepository">
+
+    <!-- 通用数据表映射 -->
+    <resultMap id="Base_Result_Map" type="EventMatchTemplateEntity">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="templateName" column="template_name" jdbcType="VARCHAR"/>
+        <result property="templateKey" column="template_key" jdbcType="VARCHAR"/>
+        <result property="eventSourceId" column="event_source_id" jdbcType="INTEGER"/>
+        <result property="saveToMatchDbFlag" column="match_flag" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 通用查询结果集合 -->
+    <sql id="Base_Column_List">
+        id, template_name,template_key, event_source_id,match_flag, create_time, update_time
+    </sql>
+
+
+    <select id="selectById" parameterType="int" resultMap="Base_Result_Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM bcp_event_match_templete
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectByEventSourceId" parameterType="EventMatchTemplateEntity"
+            resultMap="Base_Result_Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM bcp_event_match_templete
+        WHERE event_source_id = #{eventSourceId}
+    </select>
+
+    <insert id="insert" parameterType="EventMatchTemplateEntity"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO bcp_event_match_templete (template_name,template_key, event_source_id,match_flag)
+        VALUES (#{templateName},#{templateKey}, #{eventSourceId}, #{saveToMatchDbFlag})
+    </insert>
+
+    <update id="updateByEventSourceSelective" parameterType="EventMatchTemplateEntity">
+        UPDATE bcp_event_match_templete
+        <set>
+            <if test="templateName != null">template_name=#{templateName,jdbcType=VARCHAR},</if>
+            <if test="templateKey != null">template_key=#{templateKey,jdbcType=VARCHAR},</if>
+            <if test="saveToMatchDbFlag != null">match_flag=#{saveToMatchDbFlag,jdbcType=INTEGER},</if>
+        </set>
+        WHERE event_source_id = #{eventSourceId}
+    </update>
+</mapper>

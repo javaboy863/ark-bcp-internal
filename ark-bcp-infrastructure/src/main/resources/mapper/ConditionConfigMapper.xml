@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ConditionConfigRepository">
+
+	<!--通用应用节运行时数据表映射-->
+	<resultMap id="BaseResultMap" type="ConditionConfigEntity" >
+		<id property="id" column="id" jdbcType="INTEGER" />
+		<result property="ruleId" column="rule_id" jdbcType="INTEGER" />
+		<result property="type" column="type" jdbcType="INTEGER" />
+		<result property="parentId" column="parent_id" jdbcType="INTEGER" />
+		<result property="params" column="params" jdbcType="VARCHAR" />
+		<result property="isDelete" column="is_delete" jdbcType="INTEGER" />
+		<result property="version" column="version" jdbcType="INTEGER" />
+		<result property="updatedBy" column="updated_by" jdbcType="VARCHAR" />
+		<result property="createdBy" column="created_by" jdbcType="VARCHAR" />
+		<result property="createdTime" column="created_time" jdbcType="TIMESTAMP" />
+		<result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<!-- 通用查询结果集合-->
+	<sql id="Base_Column_List">
+		id,rule_id,type,parent_id,params,is_delete,version,updated_by,created_by,created_time,updated_time
+	</sql>
+
+
+	<sql id="conditions">
+		<if test="id != null"> and id =#{id,jdbcType=INTEGER}</if>
+		<if test="ruleId != null"> and rule_id =#{ruleId,jdbcType=INTEGER}</if>
+		<if test="type != null"> and type =#{type,jdbcType=INTEGER}</if>
+		<if test="parentId != null"> and parent_id =#{parentId,jdbcType=INTEGER}</if>
+		<if test="params != null and params != ''"> and params =#{params,jdbcType=VARCHAR}</if>
+		<if test="isDelete != null"> and is_delete =#{isDelete,jdbcType=INTEGER}</if>
+		<if test="version != null"> and version =#{version,jdbcType=INTEGER}</if>
+		<if test="updatedBy != null and updatedBy != ''"> and updated_by =#{updatedBy,jdbcType=VARCHAR}</if>
+		<if test="createdBy != null and createdBy != ''"> and created_by =#{createdBy,jdbcType=VARCHAR}</if>
+		<if test="createdTime != null and createdTime != ''"> and created_time =#{createdTime,jdbcType=TIMESTAMP}</if>
+		<if test="updatedTime != null and updatedTime != ''"> and updated_time =#{updatedTime,jdbcType=TIMESTAMP}</if>
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectConditionConfigById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM bcp_condition_config
+		WHERE id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 添加 （匹配有值的字段,不建议使用）-->
+	<insert id="insertConditionConfig" useGeneratedKeys="true" keyProperty="id" parameterType="ConditionConfigEntity">
+		INSERT INTO bcp_condition_config
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null"> id,</if>
+			<if test="ruleId != null"> rule_id,</if>
+			<if test="type != null"> type,</if>
+			<if test="parentId != null"> parent_id,</if>
+			<if test="params != null"> params,</if>
+			<if test="isDelete != null"> is_delete,</if>
+			<if test="version != null"> version,</if>
+			<if test="updatedBy != null"> updated_by,</if>
+			<if test="createdBy != null"> created_by,</if>
+			<if test="createdTime != null"> created_time,</if>
+			<if test="updatedTime != null"> updated_time,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null"> #{id,jdbcType=INTEGER},</if>
+			<if test="ruleId != null"> #{ruleId,jdbcType=INTEGER},</if>
+			<if test="type != null"> #{type,jdbcType=INTEGER},</if>
+			<if test="parentId != null"> #{parentId,jdbcType=INTEGER},</if>
+			<if test="params != null"> #{params,jdbcType=VARCHAR},</if>
+			<if test="isDelete != null"> #{isDelete,jdbcType=INTEGER},</if>
+			<if test="version != null"> #{version,jdbcType=INTEGER},</if>
+			<if test="updatedBy != null"> #{updatedBy,jdbcType=VARCHAR},</if>
+			<if test="createdBy != null"> #{createdBy,jdbcType=VARCHAR},</if>
+			<if test="createdTime != null"> #{createdTime,jdbcType=TIMESTAMP},</if>
+			<if test="updatedTime != null"> #{updatedTime,jdbcType=TIMESTAMP},</if>
+		</trim>
+	</insert>
+
+	<!-- 根据主键修改输入的值-->
+	<update id="updateConditionConfigByIdSelective" parameterType="ConditionConfigEntity">
+		UPDATE bcp_condition_config
+		<set>
+			<if test="id != null"> id=#{id,jdbcType=INTEGER},</if>
+			<if test="ruleId != null"> rule_id=#{ruleId,jdbcType=INTEGER},</if>
+			<if test="type != null"> type=#{type,jdbcType=INTEGER},</if>
+			<if test="parentId != null"> parent_id=#{parentId,jdbcType=INTEGER},</if>
+			<if test="params != null"> params=#{params,jdbcType=VARCHAR},</if>
+			<if test="isDelete != null"> is_delete=#{isDelete,jdbcType=INTEGER},</if>
+			<if test="version != null"> version=#{version,jdbcType=INTEGER},</if>
+			<if test="updatedBy != null"> updated_by=#{updatedBy,jdbcType=VARCHAR},</if>
+			<if test="createdBy != null"> created_by=#{createdBy,jdbcType=VARCHAR},</if>
+			<if test="createdTime != null"> created_time=#{createdTime,jdbcType=TIMESTAMP},</if>
+			<if test="updatedTime != null"> updated_time=#{updatedTime,jdbcType=TIMESTAMP},</if>
+		</set>
+		WHERE id=#{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 分页查询 -->
+	<select id="selectBcpConditionConfigListPage" resultMap="BaseResultMap" parameterType="java.util.HashMap" useCache="false">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM bcp_condition_config
+		<where>
+			<include refid="conditions" />
+		</where>
+		ORDER BY id DESC
+		           
+        limit #{startOfPage},#{pageSize}
+	</select>
+
+	<!-- 分页查询总数 -->
+	<select id="selectBcpConditionConfigListPageTotal" resultType="java.lang.Long" parameterType="java.util.HashMap" useCache="false">
+		SELECT
+		count(*)
+		FROM bcp_condition_config
+		<where>
+			<include refid="conditions" />
+		</where>
+	</select>
+
+	<!-- 按条件查询列表 -->
+	<select id="selectConditionConfigList" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM bcp_condition_config
+		<where>
+			<include refid="conditions" />
+		</where>
+	</select>
+
+</mapper>

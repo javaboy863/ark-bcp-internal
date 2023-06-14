@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CheckFailRecordRepository">
+
+    <!-- 通用数据表映射 -->
+    <resultMap id="Base_Result_Map" type="CheckFailRecordEntity">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="ruleId" column="rule_id" jdbcType="INTEGER"/>
+        <result property="messageId" column="msg_id" jdbcType="VARCHAR"/>
+        <result property="eventMessage" column="event_msg" jdbcType="VARCHAR"/>
+        <result property="reason" column="reason" jdbcType="VARCHAR"/>
+        <result property="status" column="is_handle" jdbcType="INTEGER"/>
+        <result property="handleMsg" column="handle_msg" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="conditions">
+        <if test="id != null">and id =#{id,jdbcType=INTEGER}</if>
+        <if test="ruleId != null">and rule_id =#{ruleId,jdbcType=INTEGER}</if>
+        <if test="createTime != null and createTime != ''">and create_time =#{createTime,jdbcType=TIMESTAMP}</if>
+    </sql>
+
+    <!-- 通用查询结果集合 -->
+    <sql id="Base_Column_List">
+        id, rule_id, msg_id, event_msg, reason, create_time, update_time,is_handle,handle_msg
+    </sql>
+
+    <sql id="Table_Name">
+        bcp_check_fail_record
+    </sql>
+
+    <select id="selectById" parameterType="long" resultMap="Base_Result_Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Table_Name"/>
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectByRuleId" parameterType="int" resultMap="Base_Result_Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Table_Name"/>
+        WHERE rule_id = #{ruleId}
+    </select>
+
+    <insert id="insert" parameterType="CheckFailRecordEntity"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO
+        <include refid="Table_Name"/>
+        (rule_id, msg_id, event_msg, reason)
+        VALUES
+        (#{ruleId}, #{messageId}, #{eventMessage}, #{reason})
+    </insert>
+
+    <insert id="insertSelective" parameterType="CheckFailRecordEntity"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO
+        <include refid="Table_Name"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null">rule_id,</if>
+            <if test="messageId != null">msg_id,</if>
+            <if test="eventMessage != null">event_msg,</if>
+            <if test="reason != null">reason,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null">#{ruleId},</if>
+            <if test="messageId != null">#{messageId},</if>
+            <if test="eventMessage != null">#{eventMessage},</if>
+            <if test="reason != null">#{reason},</if>
+        </trim>
+    </insert>
+
+    <!-- 根据主键修改输入的值-->
+    <update id="updateBcpCheckFailRecordByIdSelective"
+            parameterType="CheckFailRecordEntity">
+        UPDATE bcp_check_fail_record
+        <set>
+            <if test="id != null">id=#{id,jdbcType=INTEGER},</if>
+            <if test="ruleId != null">rule_id=#{ruleId,jdbcType=INTEGER},</if>
+            <if test="messageId != null">msg_id=#{messageId,jdbcType=VARCHAR},</if>
+            <if test="eventMessage != null">event_msg=#{eventMessage,jdbcType=VARCHAR},</if>
+            <if test="reason != null">reason=#{reason,jdbcType=VARCHAR},</if>
+            <if test="createTime != null">create_time=#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null">update_time=#{updateTime,jdbcType=TIMESTAMP},</if>
+            <if test="status != null">is_handle=#{status,jdbcType=INTEGER},</if>
+            <if test="handleMsg != null">handle_msg=#{handleMsg,jdbcType=VARCHAR},</if>
+        </set>
+        WHERE id=#{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 分页查询 -->
+    <select id="selectBcpCheckFailRecordListPage" resultMap="Base_Result_Map" useCache="false">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM bcp_check_fail_record
+        <where>
+            <if test="item.ruleId != null">and rule_id =#{item.ruleId,jdbcType=INTEGER}</if>
+            <if test="item.status !=null">and is_handle = #{item.status,jdbcType=INTEGER}</if>
+            <if test="fromTime != null and toTime != null">and create_time > #{fromTime,jdbcType=TIMESTAMP} and
+                create_time <![CDATA[ < ]]> #{toTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+        ORDER BY id DESC
+        limit #{item.startOfPage},#{item.pageSize}
+    </select>
+
+    <!-- 分页查询总数 -->
+    <select id="selectBcpCheckFailRecordListPageTotal" resultType="java.lang.Long" parameterType="java.util.HashMap"
+            useCache="false">
+        SELECT
+        count(*)
+        FROM bcp_check_fail_record
+        <where>
+            <if test="item.ruleId != null">and rule_id =#{item.ruleId,jdbcType=INTEGER}</if>
+            <if test="item.status !=null">and is_handle = #{item.status,jdbcType=INTEGER}</if>
+            <if test="fromTime != null and toTime != null">and create_time > #{fromTime,jdbcType=TIMESTAMP} and
+                create_time <![CDATA[ < ]]> #{toTime,jdbcType=TIMESTAMP}
+            </if>
+
+        </where>
+    </select>
+
+    <!-- 按条件查询列表 -->
+    <select id="selectBcpCheckFailRecordList" resultMap="Base_Result_Map" parameterType="java.util.HashMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM bcp_check_fail_record
+        <where>
+            <include refid="conditions"/>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.2.RELEASE</version>
+    </parent>
+
+    <groupId>com.ark.bcp</groupId>
+    <artifactId>ark-bcp-parent</artifactId>
+    <version>1.0</version>
+
+    <modules>
+        <module>ark-bcp-app</module>
+        <module>ark-bcp-domain</module>
+        <module>ark-bcp-infrastructure</module>
+        <module>ark-bcp-web</module>
+    </modules>
+    <packaging>pom</packaging>
+
+    <profiles>
+        <profile>
+            <id>autotest</id>
+            <properties>
+                <max.api.suffix>SNAPSHOT</max.api.suffix>
+            </properties>
+        </profile>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <max.api.suffix>SNAPSHOT</max.api.suffix>
+            </properties>
+        </profile>
+        <profile>
+            <id>beta</id>
+            <properties>
+                <max.api.suffix>SNAPSHOT</max.api.suffix>
+            </properties>
+        </profile>
+        <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <max.api.suffix>SNAPSHOT</max.api.suffix>
+            </properties>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <max.api.suffix>SNAPSHOT</max.api.suffix>
+            </properties>
+        </profile>
+        <profile>
+            <id>pre</id>
+            <properties>
+                <max.api.suffix>SNAPSHOT</max.api.suffix>
+            </properties>
+        </profile>
+        <profile>
+            <id>release</id>
+            <properties>
+                <max.api.suffix>RELEASE</max.api.suffix>
+            </properties>
+        </profile>
+    </profiles>
+
+    <properties>
+        <main.version>1.0.0-SNAPSHOT</main.version>
+        <risk-bcp-api.version>1.2.1-${max.api.suffix}</risk-bcp-api.version>
+        <commons-lang3.version>3.7</commons-lang3.version>
+        <commons-collections.version>3.2.2</commons-collections.version>
+        <lombok.version>1.18.8</lombok.version>
+        <missfresh-rocketmq-client.version>0.4.2</missfresh-rocketmq-client.version>
+        <miss-log.version>1.3.6</miss-log.version>
+        <sentinel-base.version>0.2.0</sentinel-base.version>
+        <jackson.version>2.9.9</jackson.version>
+        <fastjson.version>1.2.70</fastjson.version>
+        <monitor-api.version>1.0.11</monitor-api.version>
+        <dubbom.version>2.6.5.9</dubbom.version>
+        <as-domain.version>1.0.5-RELEASE</as-domain.version>
+        <junit.version>4.13</junit.version>
+        <ccs.api.version>1.0.0</ccs.api.version>
+
+        <required.app_token>alB0ZnVsUkd0OU1maHJCdFAyQmlBdz09</required.app_token>
+        <required.app_name>risk-bcp</required.app_name>
+        <required.app_code>mryx-risk-bcp</required.app_code>
+
+        <spring.kafka>2.2.6.RELEASE</spring.kafka>
+        <qlexpress.version>3.2.4</qlexpress.version>
+    </properties>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- 兄弟模块引用 -->
+            <dependency>
+                <groupId>com.missfresh.risk.bcp</groupId>
+                <artifactId>risk-bcp-api</artifactId>
+                <version>${risk-bcp-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.missfresh.risk.bcp</groupId>
+                <artifactId>risk-bcp-app</artifactId>
+                <version>${main.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.missfresh.risk.bcp</groupId>
+                <artifactId>risk-bcp-domain</artifactId>
+                <version>${main.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.missfresh.risk.bcp</groupId>
+                <artifactId>risk-bcp-infrastructure</artifactId>
+                <version>${main.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.missfresh.risk.bcp</groupId>
+                <artifactId>risk-bcp-web</artifactId>
+                <version>${main.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.missfresh</groupId>
+                <artifactId>as-domain</artifactId>
+                <version>${as-domain.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.mryx.missconf</groupId>
+                <artifactId>missconf-client</artifactId>
+                <version>1.2.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.navercorp.pinpoint</groupId>
+                <artifactId>pinpoint-toolkit</artifactId>
+                <version>1.8.0.8</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.missfresh.lib</groupId>
+                <artifactId>dubbom</artifactId>
+                <version>${dubbom.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>${commons-collections.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.missfresh</groupId>
+                <artifactId>rocketmq-client</artifactId>
+                <version>${missfresh-rocketmq-client.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.mryx.missconf</groupId>
+                <artifactId>missconf-spring-boot-starter</artifactId>
+                <version>1.2.2</version>
+            </dependency>
+
+            <!-- 日志组件 -->
+            <dependency>
+                <groupId>com.missfresh</groupId>
+                <artifactId>miss-log</artifactId>
+                <version>${miss-log.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>1.2.9</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.2.9</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>2.17.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>2.17.1</version>
+            </dependency>
+
+            <!-- sentinel 限流组件 -->
+            <dependency>
+                <groupId>com.mryx</groupId>
+                <artifactId>sentinel-base</artifactId>
+                <version>0.2.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.70</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.mryx</groupId>
+                <artifactId>monitor-api</artifactId>
+                <version>${monitor-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.mryx.grampus</groupId>
+                <artifactId>ccs-api</artifactId>
+                <version>${ccs.api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.kafka</groupId>
+                <artifactId>spring-kafka</artifactId>
+                <version>2.1.8.RELEASE</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.mryx</groupId>
+                <artifactId>ark-sdk-api</artifactId>
+                <version>1.3.6-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP</artifactId>
+                <version>3.3.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>QLExpress</artifactId>
+                <version>${qlexpress.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.missfresh</groupId>
+                <artifactId>elastic-job-lite-core</artifactId>
+                <version>2.1.6.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-to-slf4j</artifactId>
+                <version>2.17.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>log4j-over-slf4j</artifactId>
+                <version>1.7.32</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>1.7.32</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
+

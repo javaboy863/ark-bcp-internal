@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--通用池设置-->
+    <bean id="common-poolconfig" class="org.apache.commons.pool2.impl.GenericObjectPoolConfig">
+        <property name="maxTotal" value="${sharding.redis.pool.maxTotal}"/>
+        <property name="maxIdle" value="${sharding.redis.pool.maxIdle}"/>
+        <property name="minIdle" value="${sharding.redis.pool.minIdle}"/>
+
+        <property name="maxWaitMillis" value="10000"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+        <property name="testWhileIdle" value="false"/>
+        <property name="numTestsPerEvictionRun" value="-1"/>
+        <property name="minEvictableIdleTimeMillis" value="60000"/>
+        <property name="timeBetweenEvictionRunsMillis" value="30000"/>
+    </bean>
+
+    <!--消息仓库配置-->
+    <bean id="message-pool-sharding" class="com.missfresh.shardingredis.conf.ClusterInfo">
+        <property name="namespace" value="message-pool-sharding"/>
+        <!--一致性hash的虚拟节点数量。此参数只对type=sharding模式有效-->
+        <property name="vNodes" value="20000"/>
+        <!--不填写默认支持：读写分离-->
+        <property name="mode" value="masterslave"/>
+        <!--不填写默认支持：随机-->
+        <property name="loadbalance" value="roundrobin"/>
+        <!--tcp 连接超时时间-->
+        <property name="connectionTimeout" value="2000"/>
+        <!--tcp  soTimeout-->
+        <property name="soTimeout" value="2000"/>
+        <property name="env" value="${sedis.env}"/>
+        <!--正式环境需要dba下发的标识符，一个集群有唯一的一个 cipher标识符-->
+        <property name="cipher" value="${sedis.message.pool.cipher}"/>
+        <property name="threadWaitTime" value="2000"/>
+        <property name="threadCoreNum" value="8"/>
+        <property name="threadMaxNum" value="32"/>
+        <property name="type" value="sharding"/>
+    </bean>
+    <!--消息仓库 redis-->
+    <bean id="message-pool-sedis" class="com.missfresh.shardingredis.spring.SpringShardingRedis">
+        <constructor-arg index="0" ref="common-poolconfig"/>
+        <constructor-arg index="1" ref="message-pool-sharding"/>
+    </bean>
+
+    <!--统计指标redis 连接池-->
+    <bean id="simplecount-sharding" class="com.missfresh.shardingredis.conf.ClusterInfo">
+        <property name="namespace" value="simplecount-sharding"/>
+        <!--一致性hash的虚拟节点数量。此参数只对type=sharding模式有效-->
+        <property name="vNodes" value="20000"/>
+        <!--不填写默认支持：读写分离-->
+        <property name="mode" value="masterslave"/>
+        <!--不填写默认支持：随机-->
+        <property name="loadbalance" value="roundrobin"/>
+        <!--tcp 连接超时时间-->
+        <property name="connectionTimeout" value="2000"/>
+        <!--tcp  soTimeout-->
+        <property name="soTimeout" value="2000"/>
+        <property name="env" value="${sedis.env}"/>
+        <!--正式环境需要dba下发的标识符，一个集群有唯一的一个 cipher标识符-->
+        <property name="cipher" value="${sedis.simple.count.cipher}"/>
+        <property name="threadWaitTime" value="2000"/>
+        <property name="threadCoreNum" value="8"/>
+        <property name="threadMaxNum" value="32"/>
+        <property name="type" value="sharding"/>
+    </bean>
+    <!--统计指标sedis-->
+    <bean id="simplecount-sedis" class="com.missfresh.shardingredis.spring.SpringShardingRedis">
+        <constructor-arg index="0" ref="common-poolconfig"/>
+        <constructor-arg index="1" ref="simplecount-sharding"/>
+    </bean>
+
+
+    <!--统计指标redis 连接池-->
+    <bean id="product_price_sharding" class="com.missfresh.shardingredis.conf.ClusterInfo">
+        <property name="namespace" value="product_price_sharding"/>
+        <!--一致性hash的虚拟节点数量。此参数只对type=sharding模式有效-->
+        <property name="vNodes" value="20000"/>
+        <!--不填写默认支持：读写分离-->
+        <property name="mode" value="masterslave"/>
+        <!--不填写默认支持：随机-->
+        <property name="loadbalance" value="roundrobin"/>
+        <!--tcp 连接超时时间-->
+        <property name="connectionTimeout" value="2000"/>
+        <!--tcp  soTimeout-->
+        <property name="soTimeout" value="2000"/>
+        <property name="env" value="${sedis.env}"/>
+        <!--正式环境需要dba下发的标识符，一个集群有唯一的一个 cipher标识符-->
+        <property name="cipher" value="${sedis.product.price.cipher}"/>
+        <property name="threadWaitTime" value="2000"/>
+        <property name="threadCoreNum" value="8"/>
+        <property name="threadMaxNum" value="32"/>
+        <property name="type" value="sharding"/>
+    </bean>
+    <!--统计指标sedis-->
+    <bean id="product_price_sedis" class="com.missfresh.shardingredis.spring.SpringShardingRedis">
+        <constructor-arg index="0" ref="common-poolconfig"/>
+        <constructor-arg index="1" ref="product_price_sharding"/>
+    </bean>
+
+
+
+    <!--统计指标redis 连接池-->
+    <bean id="common_storage_sharding" class="com.missfresh.shardingredis.conf.ClusterInfo">
+        <property name="namespace" value="common_storage_sharding"/>
+        <!--一致性hash的虚拟节点数量。此参数只对type=sharding模式有效-->
+        <property name="vNodes" value="20000"/>
+        <!--不填写默认支持：读写分离-->
+        <property name="mode" value="masterslave"/>
+        <!--不填写默认支持：随机-->
+        <property name="loadbalance" value="roundrobin"/>
+        <!--tcp 连接超时时间-->
+        <property name="connectionTimeout" value="2000"/>
+        <!--tcp  soTimeout-->
+        <property name="soTimeout" value="2000"/>
+        <property name="env" value="${sedis.env}"/>
+        <!--正式环境需要dba下发的标识符，一个集群有唯一的一个 cipher标识符-->
+        <property name="cipher" value="${sedis.common.storage.cipher}"/>
+        <property name="threadWaitTime" value="2000"/>
+        <property name="threadCoreNum" value="8"/>
+        <property name="threadMaxNum" value="32"/>
+        <property name="type" value="sharding"/>
+    </bean>
+    <!--统计指标sedis-->
+    <bean id="common_storage_sedis" class="com.missfresh.shardingredis.spring.SpringShardingRedis">
+        <constructor-arg index="0" ref="common-poolconfig"/>
+        <constructor-arg index="1" ref="common_storage_sharding"/>
+    </bean>
+</beans>

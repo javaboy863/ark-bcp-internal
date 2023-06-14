@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BcpCheckRuleAlertConfigRepository">
+
+    <!--通用应用节运行时数据表映射-->
+    <resultMap id="BaseResultMap" type="BcpCheckRuleAlertEntity">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="ruleId" column="rule_id" jdbcType="INTEGER"/>
+        <result property="alertType" column="alert_type" jdbcType="INTEGER"/>
+        <result property="alertConfigJson" column="alert_config_json" jdbcType="VARCHAR"/>
+        <result property="alertTextFormat" column="alert_text_format" jdbcType="VARCHAR"/>
+        <result property="zipped" column="zipped" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+
+    <!-- 通用查询结果集合-->
+    <sql id="Base_Column_List">
+		id,rule_id,alert_type,alert_config_json,alert_text_format,zipped,create_time,update_time
+	</sql>
+
+
+    <sql id="conditions">
+        <if test="ruleId != null">and rule_id =#{ruleId,jdbcType=INTEGER}</if>
+        <if test="alertType != null">and alert_type =#{alertType,jdbcType=INTEGER}</if>
+    </sql>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectBcpCheckRuleAlertConfigById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM bcp_check_rule_alert_config
+        WHERE id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!-- 添加 （匹配有值的字段,不建议使用）-->
+    <insert id="insertBcpCheckRuleAlertConfig" useGeneratedKeys="true" keyProperty="id"
+            parameterType="BcpCheckRuleAlertEntity">
+        INSERT INTO bcp_check_rule_alert_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null">rule_id,</if>
+            <if test="alertType != null">alert_type,</if>
+            <if test="alertConfigJson != null">alert_config_json,</if>
+            <if test="alertTextFormat != null">alert_text_format,</if>
+            <if test="zipped != null">zipped,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null">#{ruleId,jdbcType=INTEGER},</if>
+            <if test="alertType != null">#{alertType,jdbcType=INTEGER},</if>
+            <if test="alertConfigJson != null">#{alertConfigJson,jdbcType=VARCHAR},</if>
+            <if test="alertTextFormat != null">#{alertTextFormat,jdbcType=VARCHAR},</if>
+            <if test="zipped != null">#{zipped,jdbcType=INTEGER},</if>
+        </trim>
+        ON DUPLICATE KEY UPDATE
+        <trim suffixOverrides=",">
+            <if test="alertType != null">alert_type=#{alertType,jdbcType=INTEGER},</if>
+            <if test="alertConfigJson != null">alert_config_json=#{alertConfigJson,jdbcType=VARCHAR},</if>
+            <if test="alertTextFormat != null">alert_text_format=#{alertTextFormat,jdbcType=VARCHAR},</if>
+            <if test="zipped != null">zipped=#{zipped,jdbcType=INTEGER},</if>
+        </trim>
+    </insert>
+
+    <!-- 根据主键修改输入的值-->
+    <update id="updateBcpCheckRuleAlertConfigBySelective"
+            parameterType="BcpCheckRuleAlertEntity">
+        UPDATE bcp_check_rule_alert_config
+        <set>
+            <if test="alertConfigJson != null">alert_config_json=#{alertConfigJson,jdbcType=VARCHAR},</if>
+            <if test="alertTextFormat != null">alert_text_format=#{alertTextFormat,jdbcType=VARCHAR},</if>
+            <if test="zipped != null">zipped=#{zipped,jdbcType=INTEGER},</if>
+        </set>
+        WHERE id=#{id,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteBcpCheckRuleAlertConfigByRuleId" parameterType="java.lang.Long">
+		DELETE FROM bcp_check_rule_alert_config
+		WHERE rule_id = #{ruleId,jdbcType=INTEGER}
+	</delete>
+
+
+    <!-- 按条件查询列表 -->
+    <select id="selectBcpCheckRuleAlertConfigList" resultMap="BaseResultMap"
+            parameterType="BcpCheckRuleAlertEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM bcp_check_rule_alert_config
+        <where>
+            <include refid="conditions"/>
+        </where>
+    </select>
+
+</mapper>

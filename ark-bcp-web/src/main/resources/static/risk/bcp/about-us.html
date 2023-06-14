@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>risk.bcp</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <style>
+        #testNetLoading {
+            border: 10px solid currentcolor;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            color: rgba(255, 72, 145, 0.8);
+            -webkit-animation: 1s testNetLoading linear infinite;
+            animation: 1s testNetLoading linear infinite;
+            width: 60px;
+            height: 60px;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            font-size: 70px;
+            line-height: 200px;
+            margin: -30px 0 0 -30px;
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        @-webkit-keyframes testNetLoading {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes testNetLoading {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://github.githubassets.com/assets/github-fe93dc70751821c86710b7d72b637225.css">
+</head>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<body>
+<div id="html" class="markdown-body">
+    <div id="testNetLoading"></div>
+</div>
+
+<script type="text/x-markdown" id="md">
+
+<style>
+ img{
+    width:400px;
+    float:left;
+ }
+ br{
+    clear:both;
+ ]
+</style>
+
+**什么是BCP**
+
+BCP是一个基于事件业务校验平台，其核心设计目标是开箱即用、轻量级、易扩展、优鲜范围内开放源代码、对业务零入侵。
+
+**为什么需要BCP**
+
+日常运营工作中，虽然技术和运营同学一再小心，但是很偶尔还是会出现配置错误，如：
+- 由于配置问题，老用户领取到了新人券，领取后不能使用，导致客诉。
+- 用户支付后推单异常，导致用户迟迟收不到货
+- 由于配置原因，某商品价格大幅低于成本价给公司带来损失
+- 智能促销创建失败感知不到导致价格没有变更
+- 人拉肩扛的“细心”和double check也比不上系统工具的校验来的准确和及时。
+
+**我们的BCP咋样**
+
+RISK-BCP平台完全对标行业最佳（阿里BCP）实践和技术思想，以简单的接入方式完成多变的业务校验监控
+简单、业务低入侵、支持多种上报方式、事件过滤、多种延时校验策略、业务自修复、规则匹配、易扩展、支持多种规则脚本、多种报警方式、按模块上报报警、报警统计等十余种有趣又有用的功能设计
+
+**未来BCP会怎么发展**
+
+BCP会坚持优鲜范围内开源的方式发展.现在BCP只是一个初生的婴儿，虽然四肢健全，但是还需要在各位哥哥姐姐叔叔阿姨的哺育下，才能茁壮的成长。我们已经规划了BCP未来4个版本的迭代，但是它最终长成什么样，还是在座说的算！
+
+Introduction & Development & Features & Code & ReleaseNote 看这里：
+http://gitlab.missfresh.net/pandora/risk-bcp
+
+
+</script>
+
+
+<script type="text/javascript">
+    document.getElementById("html").innerHTML = marked(document.getElementById("md").textContent);
+</script>
+</body>

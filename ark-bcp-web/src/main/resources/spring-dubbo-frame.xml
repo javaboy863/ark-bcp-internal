@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://code.alibabatech.com/schema/dubbo
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <dubbo:application name="${appCode}" logger="slf4j">
+        <dubbo:parameter key="dump.directory" value="/data/logs/${appCode}/dubbo"/>
+    </dubbo:application>
+
+
+    <dubbo:registry
+            id="zsc"
+            protocol="zookeeper" address="${zookeeper.address}" client="zkclient"/>
+
+    <dubbo:protocol name="dubbo" port="20880"/>
+</beans>

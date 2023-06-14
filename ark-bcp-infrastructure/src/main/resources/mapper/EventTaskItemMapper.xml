@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EventTaskItemRepository">
+
+    <!-- 通用数据表映射 -->
+    <resultMap id="Base_Result_Map" type="EventTaskItemEntity">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="ruleId" column="rule_id" jdbcType="INTEGER"/>
+        <result property="eventId" column="event_id" jdbcType="INTEGER"/>
+        <result property="retryTime" column="retrytime" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result property="sharding" column="sharding" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result property="messageId" column="msg_id" jdbcType="VARCHAR"/>
+        <result property="eventMessage" column="event_msg" jdbcType="VARCHAR"/>
+        <result property="expireTime" column="expire_time" jdbcType="TIMESTAMP"/>
+        <result property="status" column="e_status" jdbcType="INTEGER"/>
+        <result property="receiveTime" column="receive_time" jdbcType="TIMESTAMP"/>
+        <result property="version" column="version" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 通用查询结果集合 -->
+    <sql id="Base_Column_List">
+        id, event_id, retrytime,rule_id, msg_id, event_msg, expire_time, e_status, receive_time, version, create_time, update_time,sharding
+    </sql>
+
+    <sql id="Table_Name">
+        bcp_event_task_item
+    </sql>
+
+    <select id="selectById" resultMap="Base_Result_Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Table_Name"/>
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectByIds" resultMap="Base_Result_Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Table_Name"/>
+        WHERE
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <insert id="insert" parameterType="EventTaskItemEntity"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO
+        <include refid="Table_Name"/>
+        (event_id,rule_id, msg_id, event_msg, expire_time, e_status, receive_time,sharding)
+        VALUES
+        (#{eventId},#{ruleId}, #{messageId}, #{eventMessage}, #{expireTime}, #{status}, #{receiveTime},#{sharding})
+    </insert>
+
+    <insert id="insertSelective" parameterType="EventTaskItemEntity"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO
+        <include refid="Table_Name"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sharding != null">sharding,</if>
+            <if test="eventId != null">event_id,</if>
+            <if test="ruleId != null">rule_id,</if>
+            <if test="messageId != null">msg_id,</if>
+            <if test="eventMessage != null">event_msg,</if>
+            <if test="status != null">e_status,</if>
+            <if test="receiveTime != null">receive_time,</if>
+            <if test="version != null">version,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="expireTime != null">expire_time,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sharding != null">#{sharding},</if>
+            <if test="eventId != null">#{eventId},</if>
+            <if test="ruleId != null">#{ruleId},</if>
+            <if test="messageId != null">#{messageId},</if>
+            <if test="eventMessage != null">#{eventMessage},</if>
+            <if test="status != null">#{status},</if>
+            <if test="receiveTime != null">#{receiveTime},</if>
+            <if test="version != null">#{version},</if>
+            <if test="createTime != null">#{createTime}</if>
+            <if test="expireTime != null">#{expireTime}</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="EventTaskItemEntity">
+        UPDATE
+        <include refid="Table_Name"/>
+        <set>
+            rule_id = #{ruleId},
+            msg_id = #{messageId},
+            event_msg = #{eventMessage},
+            expire_time = #{expireTime},
+            e_status = #{status},
+            receive_time = #{receiveTime},
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateByIdSelective" parameterType="EventTaskItemEntity">
+        UPDATE
+        <include refid="Table_Name"/>
+        <set>
+            <if test="status != null">e_status = #{status},</if>
+            <if test="version != null">version = version+1,</if>
+            <if test="retryTime != null">retrytime = #{retryTime},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM
+        <include refid="Table_Name"/>
+        WHERE id = #{id}
+    </delete>
+
+    <select id="selectShardingEntityByPageSelective" resultType="java.lang.Long">
+        SELECT
+        id
+        FROM
+        <include refid="Table_Name"/>
+        <where>
+            <if test="true">and sharding=#{sharding}</if>
+            <if test="true">and expire_time<![CDATA[ < ]]>#{expireTime}</if>
+            <if test="true">and retrytime<![CDATA[ < ]]>#{retryTime}</if>
+            <if test="true">and id>#{id}</if>
+        </where>
+        limit #{maxPageSize}
+    </select>
+</mapper>

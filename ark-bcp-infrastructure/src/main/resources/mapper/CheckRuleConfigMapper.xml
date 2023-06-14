@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CheckRuleConfigRepository">
+
+    <!--通用应用节运行时数据表映射-->
+    <resultMap id="BaseResultMap" type="CheckRuleConfigEntity">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="eventId" column="event_id" jdbcType="INTEGER"/>
+        <result property="ruleName" column="rule_name" jdbcType="VARCHAR"/>
+        <result property="appCode" column="app_code" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="mockData" column="mock_data" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="isDelete" column="is_delete" jdbcType="INTEGER"/>
+        <result property="version" column="version" jdbcType="INTEGER"/>
+        <result property="updatedBy" column="updated_by" jdbcType="VARCHAR"/>
+        <result property="createdBy" column="created_by" jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+
+    <!-- 通用查询结果集合-->
+    <sql id="Base_Column_List">
+		id,event_id,rule_name,app_code,description,mock_data,status,is_delete,version,updated_by,created_by,created_time,updated_time
+	</sql>
+
+
+    <sql id="conditions">
+        <if test="id != null">and id =#{id,jdbcType=INTEGER}</if>
+        <if test="eventId != null">and event_id =#{eventId,jdbcType=INTEGER}</if>
+        <if test="ruleName != null and ruleName != ''">and rule_name =#{ruleName,jdbcType=VARCHAR}</if>
+        <if test="appCode != null and appCode != ''">and app_code =#{appCode,jdbcType=VARCHAR}</if>
+        <if test="description != null and description != ''">and description =#{description,jdbcType=VARCHAR}</if>
+        <if test="mockData != null and mockData != ''">and mock_data =#{mockData,jdbcType=VARCHAR}</if>
+        <if test="status != null">and status =#{status,jdbcType=INTEGER}</if>
+        <if test="isDelete != null">and is_delete =#{isDelete,jdbcType=INTEGER}</if>
+        <if test="version != null">and version =#{version,jdbcType=INTEGER}</if>
+        <if test="updatedBy != null and updatedBy != ''">and updated_by =#{updatedBy,jdbcType=VARCHAR}</if>
+        <if test="createdBy != null and createdBy != ''">and created_by =#{createdBy,jdbcType=VARCHAR}</if>
+        <if test="createdTime != null and createdTime != ''">and created_time =#{createdTime,jdbcType=TIMESTAMP}</if>
+        <if test="updatedTime != null and updatedTime != ''">and updated_time =#{updatedTime,jdbcType=TIMESTAMP}</if>
+    </sql>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectCheckRuleConfigById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM bcp_check_rule_config
+        WHERE id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!-- 添加 （匹配有值的字段,不建议使用）-->
+    <insert id="insertCheckRuleConfig" useGeneratedKeys="true" keyProperty="id"
+            parameterType="CheckRuleConfigEntity">
+        INSERT INTO bcp_check_rule_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="eventId != null">event_id,</if>
+            <if test="ruleName != null">rule_name,</if>
+            <if test="appCode != null">app_code,</if>
+            <if test="description != null">description,</if>
+            <if test="mockData != null">mock_data,</if>
+            <if test="status != null">status,</if>
+            <if test="isDelete != null">is_delete,</if>
+            <if test="version != null">version,</if>
+            <if test="updatedBy != null">updated_by,</if>
+            <if test="createdBy != null">created_by,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="updatedTime != null">updated_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=INTEGER},</if>
+            <if test="eventId != null">#{eventId,jdbcType=INTEGER},</if>
+            <if test="ruleName != null">#{ruleName,jdbcType=VARCHAR},</if>
+            <if test="appCode != null">#{appCode,jdbcType=VARCHAR},</if>
+            <if test="description != null">#{description,jdbcType=VARCHAR},</if>
+            <if test="mockData != null">#{mockData,jdbcType=VARCHAR},</if>
+            <if test="status != null">#{status,jdbcType=INTEGER},</if>
+            <if test="isDelete != null">#{isDelete,jdbcType=INTEGER},</if>
+            <if test="version != null">#{version,jdbcType=INTEGER},</if>
+            <if test="updatedBy != null">#{updatedBy,jdbcType=VARCHAR},</if>
+            <if test="createdBy != null">#{createdBy,jdbcType=VARCHAR},</if>
+            <if test="createdTime != null">#{createdTime,jdbcType=TIMESTAMP},</if>
+            <if test="updatedTime != null">#{updatedTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+
+    <!-- 根据主键修改输入的值-->
+    <update id="updateCheckRuleConfigByIdSelective"
+            parameterType="CheckRuleConfigEntity">
+        UPDATE bcp_check_rule_config
+        <set>
+            <if test="id != null">id=#{id,jdbcType=INTEGER},</if>
+            <if test="eventId != null">event_id=#{eventId,jdbcType=INTEGER},</if>
+            <if test="ruleName != null">rule_name=#{ruleName,jdbcType=VARCHAR},</if>
+            <if test="appCode != null">app_code=#{appCode,jdbcType=VARCHAR},</if>
+            <if test="description != null">description=#{description,jdbcType=VARCHAR},</if>
+            <if test="mockData != null">mock_data=#{mockData,jdbcType=VARCHAR},</if>
+            <if test="status != null">status=#{status,jdbcType=INTEGER},</if>
+            <if test="isDelete != null">is_delete=#{isDelete,jdbcType=INTEGER},</if>
+            <if test="version != null">version=#{version,jdbcType=INTEGER},</if>
+            <if test="updatedBy != null">updated_by=#{updatedBy,jdbcType=VARCHAR},</if>
+            <if test="createdBy != null">created_by=#{createdBy,jdbcType=VARCHAR},</if>
+            <if test="createdTime != null">created_time=#{createdTime,jdbcType=TIMESTAMP},</if>
+            <if test="updatedTime != null">updated_time=#{updatedTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        WHERE id=#{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 分页查询 -->
+    <select id="selectCheckRuleConfigListPage" resultMap="BaseResultMap" parameterType="java.util.HashMap"
+            useCache="false">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM bcp_check_rule_config
+        <where>
+            <include refid="conditions"/>
+        </where>
+        ORDER BY id DESC
+
+        limit #{startOfPage},#{pageSize}
+    </select>
+
+    <!-- 分页查询总数 -->
+    <select id="selectCheckRuleConfigListPageTotal" resultType="java.lang.Long" parameterType="java.util.HashMap"
+            useCache="false">
+        SELECT
+        count(*)
+        FROM bcp_check_rule_config
+        <where>
+            <include refid="conditions"/>
+        </where>
+    </select>
+
+    <!-- 按条件查询列表 -->
+    <select id="selectCheckRuleConfigList" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM bcp_check_rule_config
+        <where>
+            <include refid="conditions"/>
+        </where>
+    </select>
+
+    <select id="searchCheckRuleConfigList" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bcp_check_rule_config
+        <where>
+            <if test="ruleName != null and ruleName != ''">`rule_name` like #{ruleName,jdbcType=VARCHAR}</if>
+            <if test="isDelete != null">and is_delete =#{isDelete,jdbcType=INTEGER}</if>
+        </where>
+        limit #{pageSize}
+    </select>
+
+</mapper>

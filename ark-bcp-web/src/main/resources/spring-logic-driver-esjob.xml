@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:reg="http://www.dangdang.com/schema/ddframe/reg"
+       xmlns:job="http://www.dangdang.com/schema/ddframe/job"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.dangdang.com/schema/ddframe/reg
+http://www.dangdang.com/schema/ddframe/reg/reg.xsd
+http://www.dangdang.com/schema/ddframe/job
+http://www.dangdang.com/schema/ddframe/job/job.xsd
+">
+
+    <import resource="classpath*:/esjob-db.xml"/>
+
+    <reg:zookeeper
+            id="esjob.risk.bcp.driver.reg"
+            server-lists="${esjob.logic.driver.zookeeper}"
+            namespace="${esjob.logic.driver.namespace}"
+            session-timeout-milliseconds="${esjob.logic.driver.session.timeout.ms}"/>
+
+    <!--每1分钟执行一次-->
+    <job:simple
+            id="esjob.risk.bcp.driver.eventtaskdirverjob"
+            class="com.ark.bcp.web.web.job.EventTaskDirverJob"
+            registry-center-ref="esjob.risk.bcp.driver.reg"
+            sharding-total-count="8"
+            cron="0/10 * * * * ? "
+            sharding-item-parameters="0=0,1=1,2=2,3=3,4=4,5=5,6=6,7=7"
+            failover="true"
+            description="EventTaskDirverJob"
+            overwrite="true"
+            job-sharding-strategy-class="io.elasticjob.lite.api.strategy.impl.AverageAllocationJobShardingStrategy"
+            event-trace-rdb-data-source="esjob-db-source"/>
+
+</beans>

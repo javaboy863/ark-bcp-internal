@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EventSourceConfigRepository">
+
+    <!-- 通用数据表映射 -->
+    <resultMap id="Base_Result_Map" type="EventSourceConfigEntity">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="source_name" jdbcType="VARCHAR"/>
+        <result property="description" column="source_desc" jdbcType="VARCHAR"/>
+        <result property="type" column="source_type" jdbcType="INTEGER"/>
+        <result property="delayTypeCode" column="delay_type" jdbcType="INTEGER"/>
+        <result property="triggerType" column="trigger_type" jdbcType="INTEGER"/>
+        <result property="delayTypeParam" column="delay_config_json" jdbcType="VARCHAR"/>
+        <result property="detailConf" column="detail_conf" jdbcType="VARCHAR"/>
+        <result property="appCode" column="app_code" jdbcType="VARCHAR"/>
+        <result property="sampleRatio" column="sample_ratio" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="version" column="version" jdbcType="INTEGER"/>
+        <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="is_delete" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 通用查询结果集合 -->
+    <sql id="Base_Column_List">
+        id, source_name, source_desc, source_type, detail_conf, app_code, sample_ratio,
+        status, version, create_user, create_time, update_user, update_time, is_delete,
+        delay_type,delay_config_json,trigger_type
+    </sql>
+
+    <sql id="Table_Name">
+        bcp_event_source_config
+    </sql>
+
+    <sql id="Query_Conditions">
+        <if test="id != null">and id = #{id, jdbcType=INTEGER}</if>
+        <if test="name != null">and source_name = #{name, jdbcType=VARCHAR}</if>
+        <if test="description != null">and source_desc = #{description, jdbcType=VARCHAR}</if>
+        <if test="type != null">and source_type = #{type, jdbcType=INTEGER}</if>
+        <if test="detailConf != null">and detail_conf = #{detailConf, jdbcType=VARCHAR}</if>
+        <if test="appCode != null">and app_code = #{appCode, jdbcType=VARCHAR}</if>
+        <if test="sampleRatio != null">and sample_ratio = #{sampleRatio, jdbcType=INTEGER}</if>
+        <if test="triggerType != null">and trigger_type = #{triggerType, jdbcType=INTEGER}</if>
+        <if test="status != null">and status = #{status, jdbcType=INTEGER}</if>
+        <if test="version != null">and version = #{version, jdbcType=INTEGER}</if>
+        <if test="createUser != null">and create_user = #{createUser, jdbcType=VARCHAR}</if>
+        <if test="createTime != null">and create_time = #{createTime, jdbcType=TIMESTAMP}</if>
+        <if test="updateUser != null">and update_user = #{updateUser, jdbcType=VARCHAR}</if>
+        <if test="updateTime != null">and update_time = #{updateTime, jdbcType=TIMESTAMP}</if>
+        <if test="isDelete != null">and is_delete = #{isDelete, jdbcType=INTEGER}</if>
+    </sql>
+
+    <select id="selectById" resultMap="Base_Result_Map" parameterType="java.lang.Long">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Table_Name"/>
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectByIds" resultMap="Base_Result_Map" parameterType="int">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Table_Name"/>
+        WHERE
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="queryByCondition" resultMap="Base_Result_Map"
+            parameterType="EventSourceConfigEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Table_Name"/>
+        WHERE
+        <trim prefixOverrides="and">
+            <include refid="Query_Conditions"/>
+        </trim>
+    </select>
+
+    <select id="queryIdsByCondition" resultType="long">
+        SELECT id
+        FROM
+        <include refid="Table_Name"/>
+        WHERE
+        <trim prefixOverrides="and">
+            <include refid="Query_Conditions"/>
+        </trim>
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="selectListPage" resultMap="Base_Result_Map" parameterType="java.util.HashMap" useCache="false">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Table_Name"/>
+        <where>
+            <include refid="Query_Conditions"/>
+        </where>
+        ORDER BY id DESC
+
+        limit #{startOfPage},#{pageSize}
+    </select>
+
+    <insert id="insertSelective" parameterType="EventSourceConfigEntity"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO
+        <include refid="Table_Name"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            source_name,
+            <if test="description != null">source_desc,</if>
+            <if test="type != null">source_type,</if>
+            <if test="detailConf != null">detail_conf,</if>
+            <if test="appCode != null">app_code,</if>
+            <if test="sampleRatio != null">sample_ratio,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="delayTypeCode != null">delay_type,</if>
+            <if test="triggerType != null">trigger_type,</if>
+            <if test="delayTypeParam != null">delay_config_json,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{name},
+            <if test="description != null">#{description},</if>
+            <if test="type != null">#{type},</if>
+            <if test="detailConf != null">#{detailConf},</if>
+            <if test="appCode != null">#{appCode},</if>
+            <if test="sampleRatio != null">#{sampleRatio},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="delayTypeCode != null">#{delayTypeCode},</if>
+            <if test="triggerType != null">#{triggerType},</if>
+            <if test="delayTypeParam != null">#{delayTypeParam},</if>
+        </trim>
+    </insert>
+
+    <update id="updateByIdSelective" parameterType="EventSourceConfigEntity">
+        UPDATE
+        <include refid="Table_Name"/>
+        <set>
+            <if test="name != null">source_name = #{name},</if>
+            <if test="description != null">source_desc = #{description},</if>
+            <if test="type != null">source_type = #{type},</if>
+            <if test="detailConf != null">detail_conf = #{detailConf},</if>
+            <if test="appCode != null">app_code = #{appCode},</if>
+            <if test="sampleRatio != null">sample_ratio = #{sampleRatio},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateUser != null">update_user = #{updateUser},</if>
+            <if test="isDelete != null">is_delete = #{isDelete},</if>
+            <if test="delayTypeCode != null">delay_type = #{delayTypeCode},</if>
+            <if test="triggerType != null">trigger_type = #{triggerType},</if>
+            <if test="delayTypeParam != null">delay_config_json = #{delayTypeParam},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="deleteById" parameterType="int">
+        UPDATE
+        <include refid="Table_Name"/>
+        SET is_delete = 1
+        WHERE id = #{id}
+    </update>
+
+    <!-- 分页查询总数 -->
+    <select id="pageTotal" resultType="java.lang.Long" parameterType="java.util.HashMap" useCache="false">
+        SELECT
+        count(*)
+        FROM
+        <include refid="Table_Name"/>
+        <where>
+            <include refid="Query_Conditions"/>
+        </where>
+    </select>
+
+    <select id="queryByName" resultMap="Base_Result_Map"
+            parameterType="EventSourceConfigEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Table_Name"/>
+        WHERE
+        source_name like concat(#{name,jdbcType=VARCHAR},'%') AND is_delete = 0
+        limit 20
+    </select>
+</mapper>

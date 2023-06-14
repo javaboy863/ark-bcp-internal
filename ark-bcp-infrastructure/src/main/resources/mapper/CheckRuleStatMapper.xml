@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CheckRuleStatRepository">
+
+    <!-- 通用数据表映射 -->
+    <resultMap id="Base_Result_Map" type="CheckRuleStatEntity">
+        <id property="id" column="id" jdbcType="INTEGER" />
+        <result property="ruleId" column="rule_id" jdbcType="INTEGER" />
+        <result property="statTime" column="stat_time" jdbcType="INTEGER" />
+        <result property="succCount" column="succ_count" jdbcType="INTEGER" />
+        <result property="failCount" column="fail_count" jdbcType="INTEGER" />
+        <result property="exceptionCount" column="exception_count" jdbcType="INTEGER" />
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP" />
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <!-- 通用查询结果集合 -->
+    <sql id="Base_Column_List">
+        id, rule_id, stat_time, succ_count, fail_count, exception_count, create_time, update_time
+    </sql>
+
+    <sql id="Table_Name">
+        bcp_check_rule_stat
+    </sql>
+
+    <select id="selectById" parameterType="int" resultMap="Base_Result_Map">
+        SELECT <include refid="Base_Column_List" />
+        FROM <include refid="Table_Name" />
+        WHERE  id = #{id}
+    </select>
+
+    <select id="selectByRuleId" parameterType="int" resultMap="Base_Result_Map">
+        SELECT <include refid="Base_Column_List" />
+        FROM <include refid="Table_Name" />
+        WHERE rule_id = #{ruleId}
+    </select>
+
+    <insert id="insert" parameterType="CheckRuleStatEntity"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO <include refid="Table_Name" />
+        (rule_id, stat_time, succ_count, fail_count, exception_count)
+        VALUES
+        (#{ruleId}, #{statTime}, #{succCount}, #{failCount}, #{exceptionCount})
+    </insert>
+
+    <insert id="insertSelective" parameterType="CheckRuleStatEntity"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO <include refid="Table_Name" />
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null">rule_id, </if>
+            <if test="statTime != null">stat_time, </if>
+            <if test="succCount != null">succ_count, </if>
+            <if test="failCount != null">fail_count, </if>
+            <if test="exceptionCount != null">exception_count, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null">#{ruleId}, </if>
+            <if test="statTime != null">#{statTime}, </if>
+            <if test="succCount != null">#{succCount}, </if>
+            <if test="failCount != null">#{failCount}, </if>
+            <if test="exceptionCount != null">#{exceptionCount}, </if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="CheckRuleStatEntity" >
+        UPDATE <include refid="Table_Name" />
+        <set>
+            rule_id = #{ruleId},
+            stat_time = #{statTime},
+            succ_count = #{succCount},
+            fail_count = #{failCount},
+            exception_count = #{exceptionCount}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateByIdSelective" parameterType="CheckRuleStatEntity">
+        UPDATE <include refid="Table_Name" />
+        <set>
+            <if test="ruleId != null">rule_id = #{ruleId}, </if>
+            <if test="statTime != null">stat_time = #{statTime}, </if>
+            <if test="succCount != null">succ_count = #{succCount}, </if>
+            <if test="failCount != null">fail_count = #{failCount}, </if>
+            <if test="exceptionCount != null">excpetion_count = #{exceptionCount}, </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <insert id="incrStatCount" >
+        INSERT INTO <include refid="Table_Name" />
+        (rule_id, stat_time, <choose>
+            <when test="type == 1">succ_count</when>
+            <when test="type == 2">fail_count</when>
+            <when test="type == 3">exception_count</when>
+        </choose>)
+        VALUES
+        (#{ruleId}, #{statTime}, 1)
+        ON DUPLICATE KEY UPDATE
+        <choose>
+            <when test="type == 1">succ_count</when>
+            <when test="type == 2">fail_count</when>
+            <when test="type == 3">exception_count</when>
+        </choose>
+        =
+        <choose>
+            <when test="type == 1">succ_count</when>
+            <when test="type == 2">fail_count</when>
+            <when test="type == 3">exception_count</when>
+        </choose> + 1
+    </insert>
+</mapper>
